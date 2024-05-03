@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mashirl's Blog</title><link>https://mashirl.com/</link><description>Recent content on Mashirl's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 29 Dec 2023 19:50:31 +0000</lastBuildDate><atom:link href="https://mashirl.com/index.xml" rel="self" type="application/rss+xml"/><item><title>年末的自言自语</title><link>https://mashirl.com/2023/12/29/lost-sound-in-2023/</link><pubDate>Fri, 29 Dec 2023 19:50:31 +0000</pubDate><guid>https://mashirl.com/2023/12/29/lost-sound-in-2023/</guid><description>&lt;p>城市里尽是明亮的灯光，若是从整座城市来看这幅景象，定是一幅歌舞升平、一切向好的景象。此时此刻我的主观感受却是虚无的、难以描述的。&lt;/p>
+&lt;p>人山人海的大街小巷、光鲜亮丽的购物中心还有谈笑风生的同学之间，似乎也都没有我的容身之所。&lt;/p>
+&lt;p>我在做些什么？应当做些什么？似乎也都是天方夜谭了。&lt;/p>
+&lt;p>我独自一人在城市里行走着，若有所思地打开了手机，读起了各位的年终总结。在我的印象里，我似乎从未写过一篇正经的年终总结。我不禁羞愧起来，回想这一年自己都做了些什么，思来想去也无非是考试、成绩等虚无缥缈的事情罢了。累死累活，竟也没什么可写的。&lt;/p>
+&lt;p>想到这里，便不再想了，只有继续漫无目的地向前走着。经过购物中心，穿过人山人海，回到我在这偌大城市唯一的家。&lt;/p></description></item><item><title>失去的回忆</title><link>https://mashirl.com/2023/09/20/unknown-1/</link><pubDate>Wed, 20 Sep 2023 09:55:00 +0000</pubDate><guid>https://mashirl.com/2023/09/20/unknown-1/</guid><description>&lt;p>刚刚在 web.archive.org 上翻阅了曾经的某个人的个人网站，不过并没有找到什么有用的东西。&lt;/p>
+&lt;p>互联网的记忆也许并非我们想象的那样强大。一个完整的、完善的网站变得支离破碎只需要几天晚上，而几年后的今天，如果没有当时的备份也很难再找到什么有用的东西了。&lt;/p>
+&lt;p>证明一个人、一个网站曾经存在过的证明，还有什么呢？&lt;/p></description></item><item><title>【转载】关于 Hyper-V 虚拟机网络变慢的问题</title><link>https://mashirl.com/2023/07/12/hyper-v/</link><pubDate>Wed, 12 Jul 2023 14:49:55 +0000</pubDate><guid>https://mashirl.com/2023/07/12/hyper-v/</guid><description>&lt;blockquote>
+&lt;p>我在Hyper-V里安装了Ubuntu并设置了一个外部网络，结果整个机子网络都变得特别慢，然后搜索到了这篇文章，解决了问题，故转载于此。&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>原文地址：https://ainto.org/Article/74.html&lt;/p>
+&lt;p>原作者：Ainto&lt;/p>
+&lt;/blockquote>
+&lt;p>在 Hyper-V 里安装了 CentOS 并设置了一个外部网络；虚拟机内下载包很慢，刚开始以为是源的问题，换源后还是一样，这时才发现宿主机的网络也变得很慢，排除网络自身原因后发现是这个虚拟机的“外部网络”网卡导致的，删除它网络便正常了。&lt;/p>
+&lt;p>不过删除了虚拟机也没有网络了，这不是解决方法。&lt;/p>
+&lt;p>宿主机连的是 WIFI 网络，尝试了在 &lt;code>网络和Internet&lt;/code> 中 &lt;code>更改适配器选项&lt;/code> 找到 &lt;code>WLAN(没改名的话是这个)&lt;/code> 右键打开 &lt;code>属性&lt;/code> 在网卡名称下找到 &lt;code>配置&lt;/code> 选择 &lt;code>高级&lt;/code> 选项卡，找到 &lt;code>首选频带&lt;/code> 改为 &lt;code>首选 5GHz 频带&lt;/code> 后保存。&lt;/p>
+&lt;p>这时候再测试网络便正常了，不知道什么原理，也不知道为什么会出现这个问题&amp;hellip;&lt;/p></description></item><item><title>Archives</title><link>https://mashirl.com/archives/</link><pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate><guid>https://mashirl.com/archives/</guid><description/></item><item><title>Hello World</title><link>https://mashirl.com/2021/07/16/hello-world/</link><pubDate>Fri, 16 Jul 2021 18:37:26 +0000</pubDate><guid>https://mashirl.com/2021/07/16/hello-world/</guid><description>&lt;p>把博客重新开起来了，虽然还没想好写什么（&lt;/p>
+&lt;p>之前dalao们的友链我尽可能找回，没删除我的友链的一般我都会直接加回来，已经删除掉的之后有可能会重新申请。&lt;/p>
+&lt;p>Anyway, GL&amp;amp;HF.&lt;/p></description></item><item><title>Links</title><link>https://mashirl.com/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mashirl.com/links/</guid><description>&lt;p>To use this feature, add &lt;code>links&lt;/code> section to frontmatter.&lt;/p>
+&lt;p>This page&amp;rsquo;s frontmatter:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">links&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">title&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">GitHub&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">description&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">GitHub is the world&amp;#39;s largest software development platform.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">website&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://github.com&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">title&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TypeScript&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">description&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">website&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://www.typescriptlang.org&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">image&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ts-logo-128.jpg&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>image&lt;/code> field accepts both local and external images.&lt;/p></description></item><item><title>Search</title><link>https://mashirl.com/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mashirl.com/search/</guid><description/></item></channel></rss>
