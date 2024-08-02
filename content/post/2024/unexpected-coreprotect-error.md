@@ -2,12 +2,8 @@
 title: 解决自构建 CoreProtect 无法启动的问题
 updated: 2024-06-23 00:00:00
 date: 2024-06-23 00:00:00
-tags: 
-- [Minecraft]
-- [Minecraft服务器]
-categories:
-- [技术]
-- [Minecraft]
+tags: [Minecraft]
+categories: [技术]
 ---
 
 我最近在尝试Minecraft 1.21服务端的兼容性，[CoreProtect](https://coreprotect.net)一直是一个很重要的插件，可以帮助玩家和管理员查询方块的更改记录，以便监管和阻止恶意破坏行为。
