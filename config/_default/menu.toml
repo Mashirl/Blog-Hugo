@@ -1,11 +1,13 @@
 # Configure main menu and social menu
-#[[main]]
-#identifier = "home"
-#name = "Home"
-#url = "/"
-#[main.params]
-#icon = "home"
-#newtab = true
+# [[main]]
+# identifier = "home"
+# name = "Home"
+# url = "/"
+# [main.params]
+# icon = "home"
+# newtab = true\
+
+# Social Menu
 
 [[social]]
 identifier = "github"
@@ -15,13 +17,22 @@ url = "https://github.com/Mashirl"
 [social.params]
 icon = "brand-github"
 
-# [[social]]
-# identifier = "mail"
-# name = "E-Mail"
-# url = "mail:i@mashirl.com"
+[[social]]
+identifier = "mail"
+name = "E-Mail"
+url = "mail:i@mashirl.com"
 
-# [social.params]
-# icon = "brand-mail"
+[social.params]
+icon = "mail"
+
+# Main Menu
+
+# [[main]]
+# identifier = "about-me"
+# name = "About Me"
+# url = "/about-me"
+# [main.params]
+# icon = "user-circle"
 
 #[[social]]
 #identifier = "bilibili"

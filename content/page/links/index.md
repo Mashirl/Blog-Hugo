@@ -1,5 +1,5 @@
 ---
-title: Links
+title: 友链
 links:
   - title: Restent's Notebook
     description: 静寂に問う 答えを求めて
