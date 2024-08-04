@@ -4,7 +4,7 @@ description:
 date: 2024-08-04T20:00:00+08:00
 categories: [技术]
 tags: [Linux]
-image: 
+image: /images/asdf-python.png
 math: 
 license: 
 hidden: false
