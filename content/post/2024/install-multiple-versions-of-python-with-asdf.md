@@ -3,7 +3,9 @@ title: "使用ASDF安装并管理多个版本的Python"
 description: 
 date: 2024-08-04T20:00:00+08:00
 categories: [技术]
-tags: [Linux]
+tags:
+- Linux
+- Python
 image: /images/asdf-python.png
 math: 
 license: 
