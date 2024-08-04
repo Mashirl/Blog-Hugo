@@ -29,10 +29,8 @@ draft: false
 
 参考：[官方文档](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf)
 
-```
-
+```~/.zshrc
 . /opt/asdf-vm/asdf.sh
-
 ```
 
 ### 安装特定版本的 Python
