@@ -43,7 +43,7 @@ links:
     image: https://cdn.jsdelivr.net/gh/removeif/removeif-demo@latest/img/avatar.png
   - title: FGHRSH
     description: 
-    website: https://removeif.github.io
+    website: https://fghrsh.net
     image: https://gravatar.fghrsh.net/avatar/0c5d77513a08b8c3e38336859b53b027?s=800&d=mm&r=G
   - title: 咕萌小窝
     description: 这个人很懒，什么也没写
