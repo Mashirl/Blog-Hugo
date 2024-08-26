@@ -29,6 +29,8 @@ CoreProtect的最新构建是需要付费的，但它的源代码在[它的 GitH
 
 我们回到CoreProtect的源码中继续寻找，找到了下面这部分代码
 
+`net.coreprotect.config.ConfigHandler`
+
 ```java net.coreprotect.config.ConfigHandler (1-55行)
 package net.coreprotect.config;
 
