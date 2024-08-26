@@ -20,7 +20,7 @@ icon = "brand-github"
 [[social]]
 identifier = "mail"
 name = "E-Mail"
-url = "mail:i@mashirl.com"
+url = "mailto:i@mashirl.com"
 
 [social.params]
 icon = "mail"
