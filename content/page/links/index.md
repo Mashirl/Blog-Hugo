@@ -49,6 +49,10 @@ links:
     description: 这个人很懒，什么也没写
     website: https://www.gmoe.cc
     image: https://www.gmoe.cc/wp-content/uploads/2023/07/cropped-dove-32x32.png
+  - title: HackerRouter's Blog
+    description: 在Nerd与Geek间选择了当格陵兰岛。
+    website: https://1last.vip/
+    image: https://1last.vip/img/avatar.png
   
 menu:
     main: 
