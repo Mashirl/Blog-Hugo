@@ -112,6 +112,7 @@ avatar = ""
 emoji = ["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"]
 requiredMeta = ["name", "email", "url"]
 placeholder = ""
+login = "force"
 
 [comments.waline.locale]
 admin = "博主"
