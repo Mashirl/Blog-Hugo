@@ -48,3 +48,11 @@ draft: false
 - 安装你所需要的版本
 
 `asdf install python 3.x.y`
+
+- 设置 ASDF 中的 Python 版本
+
+`asdf global python 3.x.y`
+
+- 使用 ASDF 中安装的 Python 执行命令（以 查询版本 `python -V` 来举例）
+
+`asdf exec python -V`
