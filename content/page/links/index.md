@@ -13,6 +13,10 @@ links:
     description: 勿忘初心 方得始终
     website: https://blog.r-ay.cn
     image: https://r-ay.cn/images/cb254102-aa64-4051-af5f-77a325f14ff7.png
+  - title: 戴兜的小屋
+    description: 在迷失中寻找自我
+    image: https://daidr.me/favicon.ico
+    website: https://daidr.me
   - title: Amane's Blog
     description: 什么啊这个反应。明明你可爱的妹妹都在用甜言蜜语讨好你了，只咂两下嘴算怎么回事啊？
     website: https://blog.amane.icu/
