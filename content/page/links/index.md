@@ -53,6 +53,10 @@ links:
     description: 在Nerd与Geek间选择了当格陵兰岛。
     website: https://1last.vip/
     image: https://1last.vip/img/avatar.png
+  - title: Vahiru's Blog
+    description: 愿你能被世界温柔以待
+    website: https://vahiru.xyz/
+    image: https://api.insli.cc/linklist/img/vahiru.xyz.webp
   
 menu:
     main: 
