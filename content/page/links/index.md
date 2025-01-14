@@ -5,10 +5,10 @@ links:
     description: 静寂に問う 答えを求めて
     website: https://blog.gxres.net
     image: https://library.gxres.net/images/icons/avatar.webp
-  - title: FLYEMOJ1
-    description: 
-    website: https://flyemoji.xyz
-    image: https://blog.flyemoji.moe/assets/me@192.png
+  # - title: FLYEMOJ1
+  #   description: 
+  #   website: https://flyemoji.xyz
+  #   image: https://blog.flyemoji.moe/assets/me@192.png
   - title: ENDsoft's Blog
     description: 勿忘初心 方得始终
     website: https://blog.r-ay.cn
@@ -82,6 +82,16 @@ slug: links
 
 如果你正好看到了这个页面，不妨往下翻翻，看看下面的链接中有没有什么你感兴趣的内容。
 
+## 本站信息
+
+```
+
+网站名称：Mashirl's Blog
+头像地址：https://mashirl.com/images/avatar.jpg
+Slogan: Keep it simple, stupid!
+
+```
+
 ## 可能已经无法访问的链接
 
 - [林槐的杂货铺](https://stapxs.cn) - WebServer默认页面
@@ -89,3 +99,5 @@ slug: links
 - [ちゃおにま](https://lemonmiaow.xyz) - GitHub Pages 404页面
 
 - [StarTrails' blog](https://startrails.top) - 解析无效
+
+- [FLYEMOJ1](https://flyemoji.xyz) - 无法访问
