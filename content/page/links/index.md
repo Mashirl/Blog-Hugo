@@ -85,11 +85,9 @@ slug: links
 ## 本站信息
 
 ```
-
 网站名称：Mashirl's Blog
 头像地址：https://mashirl.com/images/avatar.jpg
 Slogan: Keep it simple, stupid!
-
 ```
 
 ## 可能已经无法访问的链接
