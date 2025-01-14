@@ -17,6 +17,10 @@ links:
     description: 在迷失中寻找自我
     image: https://daidr.me/favicon.ico
     website: https://daidr.me
+  - title: Subilan's Blog
+    description: Satellite yourself.
+    image: https://fnmdp.oss-cn-beijing.aliyuncs.com/assets/avatar.png
+    website: https://subilan.win
   - title: Amane's Blog
     description: 什么啊这个反应。明明你可爱的妹妹都在用甜言蜜语讨好你了，只咂两下嘴算怎么回事啊？
     website: https://blog.amane.icu/
