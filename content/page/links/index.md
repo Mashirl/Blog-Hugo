@@ -4,7 +4,7 @@ links:
   - title: Restent's Notebook
     description: 静寂に問う 答えを求めて
     website: https://blog.gxres.net
-    image: https://library.gxres.net/images/icons/avatar.webp
+    image: https://library.gxres.net/images/avatars/slivermoe.webp
   # - title: FLYEMOJ1
   #   description: 
   #   website: https://flyemoji.xyz
