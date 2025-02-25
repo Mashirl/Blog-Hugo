@@ -1,7 +1,7 @@
 # Change baseurl before deploy
 baseurl = "https://mashirl.com"
 languageCode = "zh-cn"
-paginate = 5
+# paginate = 5
 title = "Mashirl's Blog"
 
 # Theme i18n support
