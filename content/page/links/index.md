@@ -98,8 +98,6 @@ Slogan: Keep it simple, stupid!
 
 ## 可能已经无法访问的链接
 
-- [林槐的杂货铺](https://stapxs.cn) - WebServer默认页面
-
 - [ちゃおにま](https://lemonmiaow.xyz) - GitHub Pages 404页面
 
 - [StarTrails' blog](https://startrails.top) - 解析无效
