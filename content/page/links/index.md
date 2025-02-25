@@ -21,6 +21,10 @@ links:
     description: Satellite yourself.
     image: https://fnmdp.oss-cn-beijing.aliyuncs.com/assets/avatar.png
     website: https://subilan.win
+  - title: 林槐的杂货铺
+    description: 要来点什么吗 QWQ
+    website: https://stapxs.cn
+    image: https://blog.stapxs.cn/usr/uploads/2020/03/3664075920.png
   - title: Amane's Blog
     description: 什么啊这个反应。明明你可爱的妹妹都在用甜言蜜语讨好你了，只咂两下嘴算怎么回事啊？
     website: https://blog.amane.icu/
@@ -85,9 +89,11 @@ slug: links
 ## 本站信息
 
 ```
+
 网站名称：Mashirl's Blog
 头像地址：https://mashirl.com/images/avatar.jpg
 Slogan: Keep it simple, stupid!
+
 ```
 
 ## 可能已经无法访问的链接
