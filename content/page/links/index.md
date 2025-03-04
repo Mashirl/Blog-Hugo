@@ -17,7 +17,7 @@ links:
     description: 在迷失中寻找自我
     image: https://daidr.me/favicon.ico
     website: https://daidr.me
-  - title: Subilan's Blog
+  - title: SolitudeScroll
     description: Satellite yourself.
     image: https://fnmdp.oss-cn-beijing.aliyuncs.com/assets/avatar.png
     website: https://subilan.win
