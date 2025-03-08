@@ -109,4 +109,4 @@ public class ConfigHandler extends Queue {
 
 ## 鸣谢
 
-感谢 [Lemon_miaow](https://github.com/Lemon-miaow) 和我一起挑灯夜行研究~~“头痛砍头”的治疗方法~~。
+感谢 [Lemon_miaow](https://github.com/Lemon-miaow) 和我一起挑灯夜行研究 ~~“头痛砍头”的治疗方法~~。
