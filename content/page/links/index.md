@@ -5,10 +5,10 @@ links:
     description: 静寂に問う 答えを求めて
     website: https://blog.gxres.net
     image: https://library.gxres.net/images/avatars/slivermoe.webp
-  # - title: FLYEMOJ1
-  #   description: 
-  #   website: https://flyemoji.xyz
-  #   image: https://blog.flyemoji.moe/assets/me@192.png
+  - title: Minseong 'FLYEMOJI' Choi
+    description: 重新面对生活
+    website: https://blog.flyemoji.moe
+    image: /images/blog.flyemoji.moe.webp
   - title: ENDsoft's Blog
     description: 勿忘初心 方得始终
     website: https://blog.r-ay.cn
@@ -101,5 +101,3 @@ Slogan: Keep it simple, stupid!
 - [ちゃおにま](https://lemonmiaow.xyz) - GitHub Pages 404页面
 
 - [StarTrails' blog](https://startrails.top) - 解析无效
-
-- [FLYEMOJ1](https://flyemoji.xyz) - 无法访问
