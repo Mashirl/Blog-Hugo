@@ -72,6 +72,7 @@ links:
   - title: LLLgoyour
     description:
     website: https://lllgoyour.com
+    image: https://gravatar.com/avatar/8bfcc0af77b2be2b570982550ac63716477394d435fecf29aecc9c8a1971df39
   
 menu:
     main: 
