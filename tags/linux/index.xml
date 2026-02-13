@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Mashirl's Blog</title><link>https://mashirl.com/tags/linux/</link><description>Recent content in Linux on Mashirl's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 19 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://mashirl.com/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>解决 RTL8852CE 无线网卡下的 Fedora 蓝牙音频断触问题</title><link>https://mashirl.com/2025/10/19/bluetooth-audio-shutter-when-running-fedora-on-rtl8852ce/</link><pubDate>Sun, 19 Oct 2025 00:00:00 +0000</pubDate><guid>https://mashirl.com/2025/10/19/bluetooth-audio-shutter-when-running-fedora-on-rtl8852ce/</guid><description>&lt;h2 id="故事的开始"&gt;故事的开始
+&lt;/h2&gt;&lt;p&gt;我最近选择了Fedora作为我的主力Linux系统，然而刚迁移过来就遇到了蓝牙耳机音频断触的问题。&lt;/p&gt;
+&lt;p&gt;不管使用何种编码器播放音频，蓝牙音频总是随机地断连。&lt;/p&gt;
+&lt;p&gt;我尝试过把新的&lt;code&gt;wireplumber&lt;/code&gt;换回了传统的&lt;code&gt;pipewire-media-session&lt;/code&gt;，但并没有解决这个问题。&lt;/p&gt;
+&lt;h2 id="事情有了转机"&gt;事情有了转机
+&lt;/h2&gt;&lt;p&gt;我开始尝试在Google加入无线网卡型号搜索相关信息，结果搜到了&lt;a class="link" href="https://www.reddit.com/r/linuxquestions/comments/1kdeqv6/bluetooth_audio_dropping_in_and_out_fedora_42/" target="_blank" rel="noopener"
+&gt;一篇Reddit帖子&lt;/a&gt;，里面提到了下面这个脚本。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://github.com/anfreire/rtw8852c-fedora-fix" target="_blank" rel="noopener"
+&gt;GitHub - anfreire/rtw8852c-fedora-fix&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个脚本通过将旧版本固件symlink到新版本固件的位置，实现固件版本的“回退”以解决这个问题。&lt;/p&gt;
+&lt;h2 id="结语"&gt;结语
+&lt;/h2&gt;&lt;p&gt;我并没有在这件事中做任何事情，因此，如果这篇文章的内容对你有帮助的话，请不要忘记脚本原作者&lt;a class="link" href="https://github.com/anfreire" target="_blank" rel="noopener"
+&gt;André Freire Ferreira&lt;/a&gt;所做出的卓越贡献。&lt;/p&gt;</description></item><item><title>记几个自己常用的Pacman命令</title><link>https://mashirl.com/2024/09/01/frequently-used-features-for-pacman/</link><pubDate>Sun, 01 Sep 2024 00:00:00 +0000</pubDate><guid>https://mashirl.com/2024/09/01/frequently-used-features-for-pacman/</guid><description>&lt;ul&gt;
+&lt;li&gt;删除无用依赖（类似 &lt;code&gt;apt autoremove&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;pacman -Rsn $(pacman -Qdtq)&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;清除缓存&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;pacman -Sc&lt;/code&gt;&lt;/p&gt;</description></item><item><title>使用ASDF安装并管理多个版本的Python</title><link>https://mashirl.com/2024/08/04/install-multiple-versions-of-python-with-asdf/</link><pubDate>Sun, 04 Aug 2024 20:00:00 +0800</pubDate><guid>https://mashirl.com/2024/08/04/install-multiple-versions-of-python-with-asdf/</guid><description>&lt;img src="https://mashirl.com/images/asdf-python.png" alt="Featured image of post 使用ASDF安装并管理多个版本的Python" /&gt;&lt;p&gt;最近在运行一些Python应用的时候，发现因为Python版本太新而无法正常运行。在搜索了一通之后，发现了&lt;a class="link" href="https://asdf-vm.com" target="_blank" rel="noopener"
+&gt;ASDF&lt;/a&gt;这个应用，可以满足我的需求。&lt;/p&gt;
+&lt;p&gt;这里我只写我自己的操作步骤，更多的内容请查阅官方文档。&lt;/p&gt;
+&lt;h2 id="操作步骤"&gt;操作步骤
+&lt;/h2&gt;&lt;h3 id="安装-asdf"&gt;安装 ASDF
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;先从AUR安装ASDF (以yay为例)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考：&lt;a class="link" href="https://asdf-vm.com/guide/getting-started.html#_2-download-asdf" target="_blank" rel="noopener"
+&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;yay -S asdf-vm&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安装后，按照官方文档的指导修改配置文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考：&lt;a class="link" href="https://asdf-vm.com/guide/getting-started.html#_3-install-asdf" target="_blank" rel="noopener"
+&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-~/.zshrc" data-lang="~/.zshrc"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;. /opt/asdf-vm/asdf.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="安装特定版本的-python"&gt;安装特定版本的 Python
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;添加Python到插件列表&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf plugin-add python&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;列出Python的所有版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf list-all python&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安装你所需要的版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf install python 3.x.y&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;设置 ASDF 中的 Python 版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf global python 3.x.y&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 ASDF 中安装的 Python 执行命令（以 查询版本 &lt;code&gt;python -V&lt;/code&gt; 来举例）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf exec python -V&lt;/code&gt;&lt;/p&gt;</description></item></channel></rss>

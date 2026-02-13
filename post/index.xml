@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Mashirl's Blog</title><link>https://mashirl.com/post/</link><description>Recent content in Posts on Mashirl's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 19 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://mashirl.com/post/index.xml" rel="self" type="application/rss+xml"/><item><title>解决 RTL8852CE 无线网卡下的 Fedora 蓝牙音频断触问题</title><link>https://mashirl.com/2025/10/19/bluetooth-audio-shutter-when-running-fedora-on-rtl8852ce/</link><pubDate>Sun, 19 Oct 2025 00:00:00 +0000</pubDate><guid>https://mashirl.com/2025/10/19/bluetooth-audio-shutter-when-running-fedora-on-rtl8852ce/</guid><description>&lt;h2 id="故事的开始"&gt;故事的开始
+&lt;/h2&gt;&lt;p&gt;我最近选择了Fedora作为我的主力Linux系统，然而刚迁移过来就遇到了蓝牙耳机音频断触的问题。&lt;/p&gt;
+&lt;p&gt;不管使用何种编码器播放音频，蓝牙音频总是随机地断连。&lt;/p&gt;
+&lt;p&gt;我尝试过把新的&lt;code&gt;wireplumber&lt;/code&gt;换回了传统的&lt;code&gt;pipewire-media-session&lt;/code&gt;，但并没有解决这个问题。&lt;/p&gt;
+&lt;h2 id="事情有了转机"&gt;事情有了转机
+&lt;/h2&gt;&lt;p&gt;我开始尝试在Google加入无线网卡型号搜索相关信息，结果搜到了&lt;a class="link" href="https://www.reddit.com/r/linuxquestions/comments/1kdeqv6/bluetooth_audio_dropping_in_and_out_fedora_42/" target="_blank" rel="noopener"
+&gt;一篇Reddit帖子&lt;/a&gt;，里面提到了下面这个脚本。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://github.com/anfreire/rtw8852c-fedora-fix" target="_blank" rel="noopener"
+&gt;GitHub - anfreire/rtw8852c-fedora-fix&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这个脚本通过将旧版本固件symlink到新版本固件的位置，实现固件版本的“回退”以解决这个问题。&lt;/p&gt;
+&lt;h2 id="结语"&gt;结语
+&lt;/h2&gt;&lt;p&gt;我并没有在这件事中做任何事情，因此，如果这篇文章的内容对你有帮助的话，请不要忘记脚本原作者&lt;a class="link" href="https://github.com/anfreire" target="_blank" rel="noopener"
+&gt;André Freire Ferreira&lt;/a&gt;所做出的卓越贡献。&lt;/p&gt;</description></item><item><title>Elements Desktop 下的多账户管理</title><link>https://mashirl.com/2025/01/11/multi-accounts-management-for-elements-desktop/</link><pubDate>Sat, 11 Jan 2025 00:00:00 +0800</pubDate><guid>https://mashirl.com/2025/01/11/multi-accounts-management-for-elements-desktop/</guid><description>&lt;p&gt;各位新年快乐！这大概本站是2024年的第一篇文章。&lt;/p&gt;
+&lt;p&gt;最近在电脑上安装了Elements Desktop作为Matrix客户端。但到了需要多账户切换的时候可就伤了脑筋，我惊奇地发现，这个客户端居然没有多账户管理的功能！&lt;/p&gt;
+&lt;p&gt;于是我就在网上简单搜索了一下解决方案，然后简单地进行了一些改进。&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;然后决定顺便水一篇文章发出来了&lt;/del&gt;&lt;/p&gt;
+&lt;h2 id="系统环境"&gt;系统环境
+&lt;/h2&gt;&lt;p&gt;为了避免对内容理解造成影响，先介绍一下我的系统环境。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;操作系统：Manjaro Linux x86_64
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Element 版本：1.11.87
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;安装方式：Flatpak
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="解决方案添加启动参数"&gt;解决方案：添加启动参数
+&lt;/h2&gt;&lt;h3 id="思路"&gt;思路
+&lt;/h3&gt;&lt;p&gt;根据&lt;a class="link" href="https://ubuntu.com/community/communications/matrix/multiple-accounts" target="_blank" rel="noopener"
+&gt;这篇文档&lt;/a&gt;，我们可以通过添加&lt;code&gt;--profile&lt;/code&gt;运行参数的方式，使客户端在一个不同的Profile中启动。&lt;/p&gt;
+&lt;p&gt;例如下面这条命令&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;element-desktop --profile 0721&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;会使客户端在一个名为&lt;code&gt;0721&lt;/code&gt;的profile中启动。&lt;/p&gt;
+&lt;p&gt;对应profile的数据文件会存储在 &lt;code&gt;/home/[username]/.config/Element-0721&lt;/code&gt;，而默认的数据文件目录则是 &lt;code&gt;/home/[username]/.config/Element&lt;/code&gt;。&lt;/p&gt;
+&lt;h3 id="优化"&gt;优化
+&lt;/h3&gt;&lt;p&gt;经常使用命令行启动客户端并不是一件很优雅的事情，让我们对这个过程做一些小小的优化。&lt;/p&gt;
+&lt;h4 id="创建桌面项desktop-entry"&gt;创建桌面项（Desktop Entry）
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;吐槽：我也不知道这东西的中文名叫什么，然后搜了一下，&lt;a class="link" href="https://wiki.archlinuxcn.org/wiki/%E6%A1%8C%E9%9D%A2%E9%A1%B9" target="_blank" rel="noopener"
+&gt;archlinuxcn&lt;/a&gt;是这样翻译的。&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;其实就是普通的快捷方式吧&lt;/del&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;创建桌面项可以使客户端的启动流程更加快捷和优雅。&lt;/p&gt;
+&lt;p&gt;让我们看看怎么做吧&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;复制原有的桌面项&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我的桌面项存储在&lt;code&gt;/usr/share/applications&lt;/code&gt;下面，如果你的不在这里，可以自行查找一下桌面项的位置。&lt;/p&gt;
+&lt;p&gt;复制出来，放到个人的文件夹下面&lt;code&gt;~/.local/share/applications&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;大概是下面这样：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-desktop" data-lang="desktop"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Desktop Entry]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Element&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Comment&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Feature-rich client for Matrix&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Exec&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/bin/element-desktop %u&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Terminal&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Application&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Icon&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;io.element.Element&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;StartupWMClass&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Element&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Categories&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Network;InstantMessaging;Chat;IRCClient&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;MimeType&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;x-scheme-handler/element;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;修改桌面项&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这里&lt;code&gt;Exec&lt;/code&gt;这一项是表示点击桌面项时运行的命令，而&lt;code&gt;Name&lt;/code&gt;是桌面项显示出来的名字。&lt;/p&gt;
+&lt;p&gt;这里我们就改这两个字段。&lt;/p&gt;
+&lt;p&gt;首先，将&lt;code&gt;Exec&lt;/code&gt;字段加上&lt;code&gt;--profile [profilename]&lt;/code&gt;的启动参数，这里我们用刚才的&lt;code&gt;0721&lt;/code&gt;举例&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-desktop" data-lang="desktop"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Exec&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/bin/element-desktop --profile 0721 %u&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;名字我们也可以起一个相关一些的，比如&lt;code&gt;Elements (0721)&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-desktop" data-lang="desktop"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Elements (0721)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;最后我们得到的是一个新的“桌面项”，像下面这样&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-desktop" data-lang="desktop"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;[Desktop Entry]&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Element (0721)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Comment&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Feature-rich client for Matrix&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Exec&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/bin/element-desktop --profile 0721 %u&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Terminal&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Application&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Icon&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;io.element.Element&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;StartupWMClass&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Element&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;Categories&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Network;InstantMessaging;Chat;IRCClient&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="na"&gt;MimeType&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;x-scheme-handler/element;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这样，你就可以通过在桌面上点击来轻松多开Elements了。❤️&lt;/p&gt;
+&lt;h4 id="补充"&gt;补充
+&lt;/h4&gt;&lt;p&gt;不排除可能会有&lt;del&gt;矩阵海王&lt;/del&gt;在各种站点开设&lt;del&gt;114514&lt;/del&gt;个账号的可能性，在这里补充一下。&lt;/p&gt;
+&lt;p&gt;在你的&lt;code&gt;~/.local/share/applications&lt;/code&gt;目录中，不管下面有几级目录，都是可以正确检测到“桌面项”文件，并且显示在桌面环境的启动器中的。&lt;/p&gt;
+&lt;p&gt;所以，你可以在下面再创建一个二级目录来存放你的“桌面项”们。&lt;/p&gt;
+&lt;h2 id="参考资料"&gt;参考资料
+&lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://ubuntu.com/community/communications/matrix/multiple-accounts" target="_blank" rel="noopener"
+&gt;Using multiple Matrix accounts - Ubuntu Community&lt;/a&gt;&lt;/p&gt;</description></item><item><title>记几个自己常用的Pacman命令</title><link>https://mashirl.com/2024/09/01/frequently-used-features-for-pacman/</link><pubDate>Sun, 01 Sep 2024 00:00:00 +0000</pubDate><guid>https://mashirl.com/2024/09/01/frequently-used-features-for-pacman/</guid><description>&lt;ul&gt;
+&lt;li&gt;删除无用依赖（类似 &lt;code&gt;apt autoremove&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;pacman -Rsn $(pacman -Qdtq)&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;清除缓存&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;pacman -Sc&lt;/code&gt;&lt;/p&gt;</description></item><item><title>使用ASDF安装并管理多个版本的Python</title><link>https://mashirl.com/2024/08/04/install-multiple-versions-of-python-with-asdf/</link><pubDate>Sun, 04 Aug 2024 20:00:00 +0800</pubDate><guid>https://mashirl.com/2024/08/04/install-multiple-versions-of-python-with-asdf/</guid><description>&lt;img src="https://mashirl.com/images/asdf-python.png" alt="Featured image of post 使用ASDF安装并管理多个版本的Python" /&gt;&lt;p&gt;最近在运行一些Python应用的时候，发现因为Python版本太新而无法正常运行。在搜索了一通之后，发现了&lt;a class="link" href="https://asdf-vm.com" target="_blank" rel="noopener"
+&gt;ASDF&lt;/a&gt;这个应用，可以满足我的需求。&lt;/p&gt;
+&lt;p&gt;这里我只写我自己的操作步骤，更多的内容请查阅官方文档。&lt;/p&gt;
+&lt;h2 id="操作步骤"&gt;操作步骤
+&lt;/h2&gt;&lt;h3 id="安装-asdf"&gt;安装 ASDF
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;先从AUR安装ASDF (以yay为例)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考：&lt;a class="link" href="https://asdf-vm.com/guide/getting-started.html#_2-download-asdf" target="_blank" rel="noopener"
+&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;yay -S asdf-vm&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安装后，按照官方文档的指导修改配置文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考：&lt;a class="link" href="https://asdf-vm.com/guide/getting-started.html#_3-install-asdf" target="_blank" rel="noopener"
+&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-~/.zshrc" data-lang="~/.zshrc"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;. /opt/asdf-vm/asdf.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="安装特定版本的-python"&gt;安装特定版本的 Python
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;添加Python到插件列表&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf plugin-add python&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;列出Python的所有版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf list-all python&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安装你所需要的版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf install python 3.x.y&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;设置 ASDF 中的 Python 版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf global python 3.x.y&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 ASDF 中安装的 Python 执行命令（以 查询版本 &lt;code&gt;python -V&lt;/code&gt; 来举例）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;asdf exec python -V&lt;/code&gt;&lt;/p&gt;</description></item><item><title>解决自构建 CoreProtect 无法启动的问题</title><link>https://mashirl.com/2024/06/23/unexpected-coreprotect-error/</link><pubDate>Sun, 23 Jun 2024 00:00:00 +0000</pubDate><guid>https://mashirl.com/2024/06/23/unexpected-coreprotect-error/</guid><description>&lt;p&gt;我最近在尝试Minecraft 1.21服务端的兼容性，&lt;a class="link" href="https://coreprotect.net" target="_blank" rel="noopener"
+&gt;CoreProtect&lt;/a&gt;一直是一个很重要的插件，可以帮助玩家和管理员查询方块的更改记录，以便监管和阻止恶意破坏行为。&lt;/p&gt;
+&lt;p&gt;CoreProtect的最新构建是需要付费的，但它的源代码在&lt;a class="link" href="http://github.com/PlayPro/CoreProtect/" target="_blank" rel="noopener"
+&gt;它的 GitHub 仓库&lt;/a&gt;上开源，所以我们理所应当地想到了手动构建。然而，在手动构建之后，却出现了意料之外的报错。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:20] [Server thread/INFO]: [CoreProtect] Enabling CoreProtect v22.4
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:21] [Server thread/INFO]: [CoreProtect] Invalid plugin version (branch has not been set).
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:21] [Server thread/INFO]: [CoreProtect] To continue, set project branch to &amp;#34;development&amp;#34;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:21] [Server thread/INFO]: [CoreProtect] Running development code may result in data corruption.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:21] [Server thread/INFO]: [CoreProtect] CoreProtect was unable to start.
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:21] [Server thread/INFO]: [CoreProtect] Disabling CoreProtect v22.4
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:21] [Server thread/INFO]: [CoreProtect] Finishing up data logging. Please wait...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[00:08:21] [Server thread/INFO]: [CoreProtect] Success! Disabled CoreProtect v22.4
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;日志显示：&lt;code&gt;To continue, set project branch to &amp;quot;development&amp;quot;&lt;/code&gt;。由此得知，需要把branch设置为&lt;code&gt;development&lt;/code&gt;才可以正常运行。&lt;/p&gt;
+&lt;p&gt;那么，如何设置branch呢？&lt;/p&gt;
+&lt;p&gt;我们回到CoreProtect的源码中继续寻找，找到了下面这部分代码&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;net.coreprotect.config.ConfigHandler&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;span class="lnt"&gt;40
+&lt;/span&gt;&lt;span class="lnt"&gt;41
+&lt;/span&gt;&lt;span class="lnt"&gt;42
+&lt;/span&gt;&lt;span class="lnt"&gt;43
+&lt;/span&gt;&lt;span class="lnt"&gt;44
+&lt;/span&gt;&lt;span class="lnt"&gt;45
+&lt;/span&gt;&lt;span class="lnt"&gt;46
+&lt;/span&gt;&lt;span class="lnt"&gt;47
+&lt;/span&gt;&lt;span class="lnt"&gt;48
+&lt;/span&gt;&lt;span class="lnt"&gt;49
+&lt;/span&gt;&lt;span class="lnt"&gt;50
+&lt;/span&gt;&lt;span class="lnt"&gt;51
+&lt;/span&gt;&lt;span class="lnt"&gt;52
+&lt;/span&gt;&lt;span class="lnt"&gt;53
+&lt;/span&gt;&lt;span class="lnt"&gt;54
+&lt;/span&gt;&lt;span class="lnt"&gt;55
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.config&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.io.File&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.io.RandomAccessFile&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.sql.Connection&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.sql.ResultSet&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.sql.Statement&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.util.ArrayList&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.util.Collections&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.util.HashMap&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.util.List&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.util.Locale&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.util.Map&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;java.util.concurrent.ConcurrentHashMap&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.bukkit.Bukkit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.bukkit.World&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.bukkit.entity.Player&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.bukkit.inventory.ItemStack&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.bukkit.plugin.Plugin&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;org.bukkit.plugin.PluginManager&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;com.zaxxer.hikari.HikariConfig&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;com.zaxxer.hikari.HikariDataSource&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.bukkit.BukkitAdapter&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.consumer.Queue&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.database.Database&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.database.statement.UserStatement&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.language.Phrase&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.listener.ListenerHandler&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.model.BlockGroup&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.paper.PaperAdapter&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.patch.Patch&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.spigot.SpigotAdapter&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.utility.Chat&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.utility.Color&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;net.coreprotect.utility.Util&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ConfigHandler&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;extends&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Queue&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SERVER_VERSION&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDITION_VERSION&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;2&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDITION_BRANCH&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Util&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getBranch&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDITION_NAME&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Util&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getPluginName&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;JAVA_VERSION&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;11.0&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SPIGOT_VERSION&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;1.15&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;plugins/CoreProtect/&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;sqlite&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;database.db&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;host&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;127.0.0.1&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;port&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;3306&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;database&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;database&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;username&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;root&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;password&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;prefix&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;co_&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;maximumPoolSize&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;10&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这部分代码中的这一部分&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ConfigHandler&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;extends&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Queue&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SERVER_VERSION&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDITION_VERSION&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;2&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDITION_BRANCH&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Util&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getBranch&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDITION_NAME&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Util&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="na"&gt;getPluginName&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;我们可以看到，这里有一个常量叫做&lt;code&gt;EDITION_BRANCH&lt;/code&gt;，是通过&lt;code&gt;Util.getBranch&lt;/code&gt;方法获取的。所以我们可以把这个常量直接设置为&lt;code&gt;development&lt;/code&gt;，以解决这个问题。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-java" data-lang="java"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;public&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kd"&gt;final&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDITION_BRANCH&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#34;development&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;设置完毕之后，插件便可以正常运行了。&lt;/p&gt;
+&lt;h2 id="鸣谢"&gt;鸣谢
+&lt;/h2&gt;&lt;p&gt;感谢 &lt;a class="link" href="https://github.com/Lemon-miaow" target="_blank" rel="noopener"
+&gt;Lemon_miaow&lt;/a&gt; 和我一起挑灯夜行研究 &lt;del&gt;“头痛砍头”的治疗方法&lt;/del&gt;。&lt;/p&gt;</description></item><item><title>[再次转载] 由 PSP 破解谈到中国伸手党式网民的心理</title><link>https://mashirl.com/2024/06/03/from-psp-to-the-psychology-of-some-netizens/</link><pubDate>Mon, 03 Jun 2024 19:00:00 +0000</pubDate><guid>https://mashirl.com/2024/06/03/from-psp-to-the-psychology-of-some-netizens/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;这里是Mashirl，本篇文章是对一篇文章的再次转载。本文转载自Steven Qiu的博客 &lt;a class="link" href="https://www.littleqiu.net" target="_blank" rel="noopener"
+&gt;DreamCity&lt;/a&gt;，我在再次转载时并没有包含原转载博主所说的话，如需阅读请移步下面的原帖。&lt;/p&gt;
+&lt;p&gt;原帖地址：https://www.littleqiu.net/from-psp-to-chinese-psychology/&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原文大约著于 2011 年，当时中国还未允许游戏机进口，故本文内可能有部分内容已经过时。、&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本文全文将近 5K 字，完整阅读本文可能需要花费大量时间，请注意合理安排。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我第一次读到这篇文章是在2018年，那时的我对文中的内容还没发产生多大的共鸣。现在距离我第一次读到这篇文章已经过去了六年有余，除了感叹时光飞逝之外，我也对创作者和“伸手党”的心情也有了更深刻的理解。&lt;/p&gt;
+&lt;p&gt;时过境迁，2024年也已经过去了一半，今年我又见到了许许多多相似的事情发生，也包括最令人震惊的一件事——&lt;a class="link" href="https://lsposed.org/" target="_blank" rel="noopener"
+&gt;LSPosed&lt;/a&gt; 也因为相似的事情宣布停更。&lt;/p&gt;
+&lt;p&gt;我想说些什么，但我并不知道应该怎样表达，这样的事情过去发生了很多，也许现在也正在发生。沉默是很容易的，但我们沉默并不能总是那样了廉价。每当我再次看见这样的事情发生，我就会想：“为什么我当时没有为那些为爱发电的人们说两句话呢？”。也许是我们已经沉默得太久，以至于沉默本身也已经成为了一种折磨。所以我把这篇文章重新转载到这里，希望这篇成文于十多年前的文章能够在这个不断被信息流冲击和撕裂的时代为我们带来一些新的启示。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果仔细说起 PSP 为什么会在中国流行，大概可以列出不下一千种理由。可千言万语说到归齐，没有破解的 PSP 肯定无法成为影音游戏通吃的装 X 利器，也不会在街头巷尾地铁公交里成为装机量第一的掌上设备。稍微对 PSP 熟悉一点的人可能都知道，PSP 在 2000 型之前的时代有着各种美好，所有的自制软件和破解都畅通无阻。后来 Sony 的 CEO 来了一趟中国，看到比日本专卖店规模还大的水货电玩批发之后就回去痛下决心，彻底整改 PSP 的主板构架，愣是把这机器的破解漏洞给堵上了。导致 PSP 3000 型苦等半年多才等到一个软件漏洞破解。随后就是硬件厂商和破解黑客们之间的战斗，你升级固件，我升级自制软件，你来我往不亦乐乎。&lt;/p&gt;
+&lt;p&gt;让时间回拨到一年前，2010 年 1 月最后两天，Square Enix 的 PSP 大作《王国之心：梦中诞生》发售，这个使用了新升级文件的游戏让所有拿着 PSP 等破解的玩家傻了眼。游戏的特殊构造让目前的自制系统无法运行 ISO 文件。此时最早开发破解固件 M33 的大神 Dark Alex 早已退隐，99% 的玩家都在使用 GEN 小组的自制系统。&lt;/p&gt;
+&lt;p&gt;所有人都希望能有人出现破解掉这个游戏，让自己能玩到最新最快的 PSP 新作。&lt;/p&gt;
+&lt;p&gt;实现这个愿望的并不是国外黑客，而是一名国内的自制软件制作者。在这之前我们用盗版的时候虽然总不忘自夸一句我国人民勤劳勇敢什么的，但其实心里都明白，大部分破解高手集中在德国和俄罗斯，历代游戏主机的破解都跟国人没有半毛钱关系。只是我们宁愿相信群众的力量无穷大，相信茫茫人海中总会有人站出来解决这个问题——反正肯定不是摇旗呐喊的自己就行。&lt;/p&gt;
+&lt;p&gt;这个人的 ID 已经不用复述，在高调开贴声称自己要破解《王国之心：梦中诞生》后，他的帖子点击率和回复都达到了一个前所未有的高度。有的人认为他是哗众取宠，有的人从 PSP 游戏文件构成分析这件事儿的难度，也有人更直接地冷嘲热讽……然后在大约一周后，他放出了在游戏中开启金手指软件的截图，游戏破解成功。&lt;/p&gt;
+&lt;p&gt;十天后，他放出了破解傻瓜包。&lt;/p&gt;
+&lt;p&gt;几周后，他放出了可以直接玩更高版本系统下游戏的自制固件。&lt;/p&gt;
+&lt;p&gt;于是所有的质疑和讽刺都化作此起彼伏的赞扬，他的帖子被标红，他的破解让外国玩家也不远万里过来注册，他的名声传遍了世界，他的 ID 被尊称为大神，就像曾经带给 PSP 破解最佳思路的 Dark Alex 一样。&lt;/p&gt;
+&lt;p&gt;只是很少有人能记得，DA 在没有开发 M33 后续固件后，论坛上那些质疑和嘲讽的声音，甚至有人跑到 DA 的国外官方论坛上叫骂。那些帖子和言论随着时间沉入系统深处，却没能沉淀出伸手党们平静的心态。&lt;/p&gt;
+&lt;h2 id="接下来的精彩超过的最初所有人的想象"&gt;接下来的精彩，超过的最初所有人的想象。
+&lt;/h2&gt;&lt;p&gt;历史总是惊人地相似，这位曾经被称为国人骄傲的“大神”，在成功开发出两代自制固件，破解掉许多新游戏之后，也遭遇了相似的一幕。&lt;/p&gt;
+&lt;p&gt;是个玩 PSP 的都知道《怪物猎人 P3》要在 2010 年的 12 月 1 日发售，既是为了纪念《怪物猎人》系列周年庆，也是为了让软件商的年度财报好看一些。对于这款在中国和日本都有着极高人气的游戏，每个粉丝都热切期盼着。&lt;/p&gt;
+&lt;p&gt;在《怪物猎人 P3》发售前一周，“大神”发帖表示破解毫无压力。目前自制固件无法运行该游戏，但他可以通过一些改进搞定一切。&lt;/p&gt;
+&lt;p&gt;“大神”有一个习惯，必须等到游戏发售一周后公布销量才发布破解。《怪物猎人 P3》偷跑数日，各大论坛上憋着等下载的人数大概超过了六位，帖子里各种惨嚎和胡言乱语不计其数。不负众望的“大神”用数小时即完成了《怪物猎人 P3》的破解，随后宣布可以先给各大汉化组，以便汉化组能够尽快让大家玩到汉化游戏。&lt;/p&gt;
+&lt;p&gt;事实证明，这个世界上最美好的只有愿望。当时得知“大神”已经破解了《怪物猎人 P3》的伸手党们本已躁动不安，有人说这搞破解的在装 X，有人说他是为了赚取眼球和点击率，当然还有更难听的，总之人性的各种精彩就在这一刻被表现得淋漓尽致。在变了味的网络喧嚣中，这个故事忽然急转直下。&lt;/p&gt;
+&lt;p&gt;“大神”私下给出的破解补丁被自己熟悉的一位论坛版主泄露出去了，于是大部分支持的声音瞬间变成了声讨——凭什么你能给他却不给我们玩？更有甚者，人肉出了“大神”的个人信息要发布出去。威胁到了现实生活的“大神”惟有选择退出 PSP 破解界，从此消失在众人的视线中。&lt;/p&gt;
+&lt;p&gt;在离开网络之前，他发布了还在完善中的新自制固件，并留下了无奈的留言——“看在我让你们玩了这么多新游戏的份上，让我安静的离开吧。”&lt;/p&gt;
+&lt;p&gt;当国外 PSP 破解黑客得知这位东方同行退出之后，几乎在第一时间发表了遗憾的声明，甚至他们也承认这同道中人才是“有史以来最好的 PSP 破解黑客”。但这一切已无法挽回，《怪物猎人 3P》破解了，而付出这样代价是任何人都始料未及的。&lt;/p&gt;
+&lt;p&gt;广告商人继续卖 UMD，该玩盗版的继续玩盗版，BBS 上的管理员在打扫过论坛之后，关于这件事前前后后的就算是结束了，一切都如未曾发生。可谁也不知道下一个破解 PSP 新游戏的人在哪里，谁也不知道下一次又有谁要遭受网络冷暴力。一个一个汉化组成立又解散，一次又一次的攻讦和辱骂。有时候那些继续坚持互联网共享精神的人们也忍不住要问一句：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;大爷们，你们到底想怎样？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="从来就没温暖过"&gt;从来就没温暖过
+&lt;/h2&gt;&lt;p&gt;我国玩家的尴尬早已不是一天两天的事了，这样一个不允许电子游戏机成为进口商品的国家里想要玩游戏需要付出很多曲折的代价。面对没有官方中文版和游戏首发必然不会到货的环境，网络共享发布和汉化一直是游戏圈最受关注的两个群体。而我们通常会把那些下载免费游戏的人称为伸手党——这没什么侮辱的意思，就和字面上的意思一样，大多数玩家付出的无非就是下载的时间和点几下鼠标而已，他们可能未曾想过别人付出什么样的艰辛。 最容易受到诟病的当然还是汉化组，游戏的汉化组和影视作品字幕组还不太一样。一般来说一个游戏的汉化过程都漫长又痛苦，除非特别有爱也没什么人会去做这件事。遗憾的是就算这么单纯的工作，一样有人不断表现出各种大爷风采:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“《XXX》的汉化怎么还没开始？汉化组的人都[数据删除]去了吗？” “你们说要汉化《XXXX》都已经快四个月了，怎么还没有截图放出！” “垃圾，这汉化也太垃圾了！” “为什么没有人汉化《XX》，赶快来人开坑啊！” …………&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这也是为什么许多汉化组面对外人询问工作进度时态度不怎么好的主要原因——大家只是在网络上做白工而已，忽然凭空多出这么多视察工作的，谁的心情也不会太好。而且大多数不顾别人感受胡言乱语的人反倒不会认真去体验别人的汉化作品，他们这么做通常只是因为网络上问句话没有成本而已，就像他们下载那些别人放出的游戏和汉化补丁那样。在这间或里即使有许多真挚的感谢，也被淹没在各种责问之中了。很多人可能一辈子都没怎么被人尊重过，因此也不懂得怎样尊重别人。&lt;/p&gt;
+&lt;p&gt;这样的无理取闹导致大多数汉化组行事低调，哪怕发布新版本汉化补丁也战战兢兢，生怕惹恼了大爷们招来不知道多少叫骂和喷贴。不管是错字、延期还是有了死机 Bug，总免不了要被人喷上一番。以至于后来许多搞汉化的都是做一票就走，搞完项目就宣布解散，免得被人整个团队一起喷。&lt;/p&gt;
+&lt;p&gt;有的人说反正汉化组那么多，喷跑几个心理素质差的，还会有人继续干这个活儿。可这帮人不知道破解领域就那么几个能人，有人跑去 DA 的论坛喷他，有人在 GEN 小组的留言板上刷屏，也有人各种喷国内破解的大神……这些人绝大多数是因为被他们喷的人才玩到的新游戏，他们很容易就忘记了这一点，正如他们希望别人善待自己，但自己完全不懂如何善待别人。&lt;/p&gt;
+&lt;h2 id="我们的社会怎么了"&gt;我们的社会怎么了
+&lt;/h2&gt;&lt;p&gt;常听人说起说一个道理：那就是你对某个人好，就得一直好下去，只要有一次不够好，以前所做的各种努力可能都会付之东流。说这话的人肯定对人性有相当程度的了解，他也一定经历过什么惨痛的教训。&lt;/p&gt;
+&lt;p&gt;在很多时候，做破解也好，做软件共享也好，或者搞汉化也好，都面临这样一种窘境。你做得好就是几声赞扬，你做不好了马上质疑谩骂狼烟四起。这就好比许多软件常年免费，忽然有一天收钱了，我们愤怒又失望地骂了一万句，这才记起来，按照这个世界的规矩其实本来就该收钱。只是我们享受了太多优待，把这优待当成了常态。&lt;/p&gt;
+&lt;p&gt;其实没有什么事是真正应该的。比如几年前有个台湾人宣布独立汉化《皇家骑士团 2》的 SFC 版，但不外流。唯一要求就是申请汉化补丁的人答应不要外泄，同时附上自己手中正版《皇家骑士团 2》卡带的照片三张。这要求其实不算过分，也比较符合台湾玩家尊重正版的习惯。遗憾的是国内大部分玩家并没有 SFC 的卡带，移植版的 PS 和 SS 的正版光盘更不用说了。&lt;/p&gt;
+&lt;p&gt;于是觉得无望拿到补丁的玩家纷纷登陆那个人所在的论坛，各种破口大骂，极尽诋毁之能事。当然骂完人家照例是不给补丁的，只是那些留言让彼岸的玩家又低看了内地玩家一次。&lt;/p&gt;
+&lt;p&gt;大概所有人都能记得那些汉化、字幕和共享软件上都会标明是以研究和学习为目的，并不是用于商业用途，请于 24 小时内删除等等。这些字眼本身就已经是阐述互联网共享的基本态度，一切都应该以发布者的决定为主，因为我们只是些伸手党。可偏偏有人就是想当发布者的主人，冀望于骂几句之后改变别人的意见。没错他们是改变了，他们让更多的人学会了珍惜生命，远离破解和汉化。&lt;/p&gt;
+&lt;p&gt;其实这种事远远不止发生在游戏圈，笔者一个朋友家境不错，为人又古道热心，开了一家桌游店。经常有人电脑坏了打电话问他该怎么办，他说如果是小问题你就直接拿来修吧。那边的人就问要多少钱，他说一般情况下不会收钱。然后电话那边的人往往沉吟片刻，说好吧我再想想就挂了电话。这位朋友就不太明白，免费修电脑什么的为什么会让人那么犹豫。后来经旁人之口才知道，原来很多人已经不相信有素不相识的人可以免费帮别人忙这种事发生了，在他们看来这个社会上的每一次举手之劳都要明码标价，否则就有更深的阴谋。&lt;/p&gt;
+&lt;p&gt;我想这也是很多人面对破解、汉化和游戏共享发布等情况时的内心真实写照。对于社会大环境的怀疑，对于他人目的的揣测和出于自身的不成熟造就了众多的网络喷子，在一个不必担心责任问题的地方指责别人的确是一件爽快的事。更重要的是网络冷暴力所造成的后果往往难以追查，毕竟法不责众，犯错的是一批人而不是一个人。这个责任无法落实到谁头上去。&lt;/p&gt;
+&lt;h2 id="我们所向往的自由"&gt;我们所向往的自由
+&lt;/h2&gt;&lt;p&gt;自由宣言里对自由的定义是“在不伤害别人的前提下，你所做的一切都是正确的”。遗憾的是很少有人在发表自己看法时能够想起这句定义。在网络这个目前最开放的平台上，许多人努力寻求自由，却借着自由之名做着无尽伤害他人的事。这就像往往我们渴望公平，又希望自己拥有并利用那些不公平的力量；我们渴望尊重，却总在话里话外表现出对他人的不尊重；我们渴望得到而很少付出，却总在抱怨别人付出的太少……我们所做的一切，并不是自由，只是在扼杀自由所带来的种种可能而已。&lt;/p&gt;
+&lt;p&gt;我们对互联网最大的贡献，不过是我们每个人都是一个普通用户而已。而我们如果还想让这个世界更繁荣快乐一些，对别人的肯定和宽容是不是更重要呢？文章开头提到的那位在国内被称为“大神”的网友在《寄生前夜：第三次生日》破解遇到瓶颈后又一次出现，玩家们又一次玩到了最新的“免费游戏”。经过失去再度拥有，让很多人的改变了自己的言论。这不禁让我想起当 Dark Alex 宣布自己退出破解界不再研发自制系统的时候，在中文论坛里看到那许多叫嚣着“DA 大神已经不行了”，“快滚吧，那么久都不更新系统”的声音。在这些 Dark Alex 看不懂的中文帖子里，我小心翼翼地写上“&lt;strong&gt;感谢你这么多年来的辛勤工作，让我们玩到了那么多好游戏&lt;/strong&gt;”这样一句话。今天我在这里又一次说出来，觉得这样的话每一个字都没有错，并认为这才是对互联网共享精神最大的尊重。&lt;/p&gt;</description></item><item><title>【转载】关于 Hyper-V 虚拟机网络变慢的问题</title><link>https://mashirl.com/2023/07/12/hyper-v/</link><pubDate>Wed, 12 Jul 2023 14:49:55 +0000</pubDate><guid>https://mashirl.com/2023/07/12/hyper-v/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;我在Hyper-V里安装了Ubuntu并设置了一个外部网络，结果整个机子网络都变得特别慢，然后搜索到了这篇文章，解决了问题，故转载于此。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原文地址：https://ainto.org/Article/74.html&lt;/p&gt;
+&lt;p&gt;原作者：Ainto&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在 Hyper-V 里安装了 CentOS 并设置了一个外部网络；虚拟机内下载包很慢，刚开始以为是源的问题，换源后还是一样，这时才发现宿主机的网络也变得很慢，排除网络自身原因后发现是这个虚拟机的“外部网络”网卡导致的，删除它网络便正常了。&lt;/p&gt;
+&lt;p&gt;不过删除了虚拟机也没有网络了，这不是解决方法。&lt;/p&gt;
+&lt;p&gt;宿主机连的是 WIFI 网络，尝试了在 &lt;code&gt;网络和Internet&lt;/code&gt; 中 &lt;code&gt;更改适配器选项&lt;/code&gt; 找到 &lt;code&gt;WLAN(没改名的话是这个)&lt;/code&gt; 右键打开 &lt;code&gt;属性&lt;/code&gt; 在网卡名称下找到 &lt;code&gt;配置&lt;/code&gt; 选择 &lt;code&gt;高级&lt;/code&gt; 选项卡，找到 &lt;code&gt;首选频带&lt;/code&gt; 改为 &lt;code&gt;首选 5GHz 频带&lt;/code&gt; 后保存。&lt;/p&gt;
+&lt;p&gt;这时候再测试网络便正常了，不知道什么原理，也不知道为什么会出现这个问题&amp;hellip;&lt;/p&gt;</description></item><item><title>Hello World</title><link>https://mashirl.com/2021/07/16/hello-world/</link><pubDate>Fri, 16 Jul 2021 18:37:26 +0000</pubDate><guid>https://mashirl.com/2021/07/16/hello-world/</guid><description>&lt;p&gt;把博客重新开起来了，虽然还没想好写什么（&lt;/p&gt;
+&lt;p&gt;之前dalao们的友链我尽可能找回，没删除我的友链的一般我都会直接加回来，已经删除掉的之后有可能会重新申请。&lt;/p&gt;
+&lt;p&gt;Anyway, GL&amp;amp;HF.&lt;/p&gt;</description></item></channel></rss>
