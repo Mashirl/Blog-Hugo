@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hyper-V on Mashirl's Blog</title><link>https://mashirl.com/tags/hyper-v/</link><description>Recent content in Hyper-V on Mashirl's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 12 Jul 2023 14:49:55 +0000</lastBuildDate><atom:link href="https://mashirl.com/tags/hyper-v/index.xml" rel="self" type="application/rss+xml"/><item><title>【转载】关于 Hyper-V 虚拟机网络变慢的问题</title><link>https://mashirl.com/2023/07/12/hyper-v/</link><pubDate>Wed, 12 Jul 2023 14:49:55 +0000</pubDate><guid>https://mashirl.com/2023/07/12/hyper-v/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;我在Hyper-V里安装了Ubuntu并设置了一个外部网络，结果整个机子网络都变得特别慢，然后搜索到了这篇文章，解决了问题，故转载于此。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原文地址：https://ainto.org/Article/74.html&lt;/p&gt;
+&lt;p&gt;原作者：Ainto&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在 Hyper-V 里安装了 CentOS 并设置了一个外部网络；虚拟机内下载包很慢，刚开始以为是源的问题，换源后还是一样，这时才发现宿主机的网络也变得很慢，排除网络自身原因后发现是这个虚拟机的“外部网络”网卡导致的，删除它网络便正常了。&lt;/p&gt;
+&lt;p&gt;不过删除了虚拟机也没有网络了，这不是解决方法。&lt;/p&gt;
+&lt;p&gt;宿主机连的是 WIFI 网络，尝试了在 &lt;code&gt;网络和Internet&lt;/code&gt; 中 &lt;code&gt;更改适配器选项&lt;/code&gt; 找到 &lt;code&gt;WLAN(没改名的话是这个)&lt;/code&gt; 右键打开 &lt;code&gt;属性&lt;/code&gt; 在网卡名称下找到 &lt;code&gt;配置&lt;/code&gt; 选择 &lt;code&gt;高级&lt;/code&gt; 选项卡，找到 &lt;code&gt;首选频带&lt;/code&gt; 改为 &lt;code&gt;首选 5GHz 频带&lt;/code&gt; 后保存。&lt;/p&gt;
+&lt;p&gt;这时候再测试网络便正常了，不知道什么原理，也不知道为什么会出现这个问题&amp;hellip;&lt;/p&gt;</description></item></channel></rss>
